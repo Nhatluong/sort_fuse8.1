@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,8 +21,26 @@ import { SampleModule } from 'app/main/sample/sample.module';
 import { AuthenticationModule } from 'app/main/authentication/authentication.module';
 import { API_BASE_URL } from 'app/constants';
 import { environment } from 'environments/environment';
+import { PagesModule } from 'app/main/pages/pages.module';
+import { registerLocaleData } from '@angular/common';
+import japanese from '@angular/common/locales/ja';
+import { japanesePaginatorIntl } from 'app/main/common/paginator-intl';
+import {
+    MatCardModule,
+    MatCheckboxModule,
+    MatPaginatorIntl,
+    MatPaginatorModule,
+    MatTableModule,
+} from '@angular/material';
+import { VendorListComponent } from './pages/vendors/vendor-list/vendor-list.component';
+
+registerLocaleData(japanese, 'ja');
 
 const appRoutes: Routes = [
+    {
+        path: 'vendors',
+        component: VendorListComponent
+    },
     {
         path: '**',
         redirectTo: 'sample',
@@ -32,6 +50,7 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
+        VendorListComponent,
     ],
     imports: [
         BrowserModule,
@@ -59,12 +78,19 @@ const appRoutes: Routes = [
         LayoutModule,
         SampleModule,
         AuthenticationModule,
+        PagesModule,
+        MatCardModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatCheckboxModule,
     ],
     bootstrap: [
         AppComponent,
     ],
     providers: [
         { provide: API_BASE_URL, useValue: environment.api.baseUrl },
+        { provide: LOCALE_ID, useValue: 'ja' },
+        { provide: MatPaginatorIntl, useValue: japanesePaginatorIntl() },
     ],
 })
 export class AppModule {
